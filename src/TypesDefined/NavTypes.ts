@@ -7,7 +7,7 @@ export type RootStackParamList = {
     Signin : undefined,
     Signup: undefined,
     DrawNav : undefined,
-    Profile: {username: string, email: string, image: string}
+    Profile: undefined
 }
 export type DrawerParamList = {
   DashBoard: undefined;

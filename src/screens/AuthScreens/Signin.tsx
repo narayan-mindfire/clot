@@ -28,7 +28,6 @@ const Welcome: React.FC<SigninParams> = ({ navigation }) => {
     } catch (error) {
       console.log("sign in function is not working");
     }
-    auth?.demofunction();
   };
   return (
     <View style={styles.container}>

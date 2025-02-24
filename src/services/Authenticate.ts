@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
 const LOGIN_API = 'https://dummyjson.com/auth/login'
@@ -16,6 +17,8 @@ export const authFunction = async ({ username, password }: userDataType) => {
       password,
     });
 
+    console.log(response.data.accessToken)
+    await AsyncStorage.setItem("token", response.data.accessToken)
     console.log("Login successful:");
     return response.data;
   } catch (error) {

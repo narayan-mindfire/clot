@@ -21,17 +21,8 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
   const user = useContext(AuthContext);
   const navigation = useNavigation();
   const visitProfile = async (token: string | null | undefined) => {
-    const user = await getCurUser(token);
-    if (user) {
-      console.log(`username: ${user.username}`);
-      console.log(`email: ${user.email}`);
-      console.log(`image url: ${user.image}`);
-      navigation.navigate("Profile", {
-        username: user.username,
-        email: user.email,
-        image: user.image,
-      });
-    }
+    await getCurUser();
+    navigation.navigate("Profile");
   };
 
   return (

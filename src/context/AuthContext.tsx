@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { createContext, FC, ReactNode, useState } from "react";
 
 interface userDataTypes {
@@ -33,10 +34,11 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     setToken(userData.accessToken);
     setUser(userData);
   };
-  const signOut = () => {
+  const signOut = async () => {
     console.log("signing out");
     setUser(null);
     setToken(null);
+    await AsyncStorage.clear();
   };
   return (
     <AuthContext.Provider value={{ signIn, signOut, token, user }}>
