@@ -45,12 +45,6 @@ const Welcome: FC<WelcomeParams> = ({ navigation }) => {
       </TouchableOpacity>
       <TouchableOpacity
         style={[styles.btn, { backgroundColor: colors.card }]}
-        onPress={() => navigation.push("Homepage")}
-      >
-        <Text style={[styles.btntxt, { color: colors.text }]}>visit home</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[styles.btn, { backgroundColor: colors.card }]}
         onPress={() => navigation.push("Signin")}
       >
         <Text style={[styles.btntxt, { color: colors.text }]}>
