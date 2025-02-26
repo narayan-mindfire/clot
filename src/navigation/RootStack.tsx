@@ -15,7 +15,6 @@ const RootNav = createNativeStackNavigator<RootStackParamList>();
 const RootStack: FC = () => {
   const themeContext = useContext(ThemeContext);
   const auth = useContext(AuthContext);
-
   return (
     <NavigationContainer theme={themeContext?.theme}>
       <RootNav.Navigator screenOptions={{ headerShown: false }}>

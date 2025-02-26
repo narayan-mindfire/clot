@@ -1,6 +1,12 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { createContext, FC, ReactNode, useState } from "react";
-
+import React, {
+  createContext,
+  FC,
+  ReactNode,
+  useEffect,
+  useState,
+} from "react";
+import * as SecureStore from "expo-secure-store";
 interface userDataTypes {
   accessToken: string;
   email: string;
@@ -30,6 +36,34 @@ interface AuthProviderProps {
 export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<userDataTypes | null>(null);
   const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadStored = async () => {
+      try {
+        const storedUser = await SecureStore.getItemAsync("storedUser");
+        const storedToken = await SecureStore.getItemAsync("storedToken");
+        if (storedUser) setUser(JSON.parse(storedUser));
+        if (storedToken) setToken(JSON.parse(storedToken));
+      } catch (error) {
+        console.log("no user in the store");
+      }
+    };
+    loadStored();
+  }, []);
+
+  useEffect(() => {
+    const storeUserData = async () => {
+      try {
+        if (user)
+          await SecureStore.setItemAsync("storedUser", JSON.stringify(user));
+        if (token)
+          await SecureStore.setItemAsync("storedToken", JSON.stringify(token));
+      } catch (error) {
+        console.log(`facing error while storing data: ${error}`);
+      }
+    };
+    storeUserData();
+  }, [token, user]);
   const signIn = (userData: userDataTypes) => {
     setToken(userData.accessToken);
     setUser(userData);
@@ -38,7 +72,13 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     console.log("signing out");
     setUser(null);
     setToken(null);
-    await AsyncStorage.clear();
+    try {
+      await AsyncStorage.clear();
+      await SecureStore.deleteItemAsync("storedUser");
+      await SecureStore.deleteItemAsync("storedToken");
+    } catch (error) {
+      console.log(`facing issues in signing out: ${error}`);
+    }
   };
   return (
     <AuthContext.Provider value={{ signIn, signOut, token, user }}>
