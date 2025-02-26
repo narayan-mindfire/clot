@@ -1,23 +1,31 @@
 import { Image, StyleSheet, Text, View } from "react-native";
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useContext, useEffect, useState } from "react";
 import { useTheme } from "@react-navigation/native";
 import { ProfileParams } from "../../TypesDefined/NavTypes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import AuthContext from "../../context/AuthContext";
 
 const Profile: FC<ProfileParams> = () => {
   const { colors } = useTheme();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [image, setImage] = useState("");
+  const [firstname, setFirstname] = useState("not found");
+  const [lastname, setLastname] = useState("not found");
   useEffect(() => {
     const getData = async () => {
       try {
-        const username = await AsyncStorage.getItem("username");
-        const email = await AsyncStorage.getItem("email");
-        const image = await AsyncStorage.getItem("image");
-        if (username) setName(username);
-        if (email) setEmail(email);
-        if (image) setImage(image);
+        const unuserData = await AsyncStorage.getItem("userData");
+        if (unuserData) {
+          const userData = JSON.parse(unuserData);
+          if (userData) {
+            if (userData.username) setName(userData.username);
+            if (userData.email) setEmail(userData.email);
+            if (userData.image) setImage(userData.image);
+            if (userData.firstName) setFirstname(userData.firstName);
+            if (userData.lastName) setLastname(userData.lastName);
+          }
+        }
       } catch (error) {
         console.log("Error fetching user data:", error);
       }
@@ -34,12 +42,11 @@ const Profile: FC<ProfileParams> = () => {
         }
         style={styles.profileImage}
       />
+      <Text style={[styles.name, { color: colors.text }]}>{name}</Text>
       <Text style={[styles.name, { color: colors.text }]}>
-        {name || "Guest User"}
+        {firstname} {lastname}
       </Text>
-      <Text style={[styles.email, { color: colors.text }]}>
-        {email || "No email available"}
-      </Text>
+      <Text style={[styles.email, { color: colors.text }]}>{email}</Text>
     </View>
   );
 };

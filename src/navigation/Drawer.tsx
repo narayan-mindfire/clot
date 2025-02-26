@@ -13,6 +13,7 @@ import { useNavigation, useTheme } from "@react-navigation/native";
 import SettingPage from "../screens/SettingPage";
 import Homepage from "../screens/Homepage";
 import getCurUser from "../services/GetUser";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const Drawer = createDrawerNavigator();
 
 function CustomDrawerContent(props: DrawerContentComponentProps) {
@@ -21,7 +22,7 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
   const user = useContext(AuthContext);
   const navigation = useNavigation();
   const visitProfile = async (token: string | null | undefined) => {
-    await getCurUser();
+    if (!(await AsyncStorage.getItem("userData"))) await getCurUser();
     navigation.navigate("Profile");
   };
 
