@@ -9,12 +9,15 @@ import ThemeContext from "../context/ThemeContext";
 import AuthContext from "../context/AuthContext";
 import DrawNav from "./Drawer";
 import Profile from "../screens/userScreens/Profile";
+
 const RootNav = createNativeStackNavigator<RootStackParamList>();
+
 const RootStack: FC = () => {
-  const theme = useContext(ThemeContext);
+  const themeContext = useContext(ThemeContext);
   const auth = useContext(AuthContext);
+
   return (
-    <NavigationContainer theme={theme?.appTheme}>
+    <NavigationContainer theme={themeContext?.theme}>
       <RootNav.Navigator screenOptions={{ headerShown: false }}>
         {!auth?.token ? (
           <>
@@ -32,4 +35,5 @@ const RootStack: FC = () => {
     </NavigationContainer>
   );
 };
+
 export default RootStack;
