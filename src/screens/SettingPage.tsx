@@ -48,8 +48,16 @@ const SettingPage = () => {
         onPress={toggleTheme}
       >
         <Text style={styles.btntxt}>
-          Manually Change to{" "}
-          {themeContext.appTheme === "dark" ? "LIGHT" : "DARK"} MODE
+          use Light mode :{" "}
+          {themeContext.appTheme === "light" ? "True" : "False"}
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[styles.btn, { width: 300 }]}
+        onPress={toggleTheme}
+      >
+        <Text style={styles.btntxt}>
+          use Dark mode : {themeContext.appTheme === "dark" ? "True" : "False"}
         </Text>
       </TouchableOpacity>
 
