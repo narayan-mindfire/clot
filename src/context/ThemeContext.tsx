@@ -15,8 +15,8 @@ interface ThemeContextType {
   appTheme: string;
   setAppTheme: (theme: string) => void;
   theme: Theme;
-  useSystem: boolean;
-  setUseSystem: (value: boolean) => void;
+  // useSystem: boolean;
+  // setUseSystem: (value: boolean) => void;
 }
 
 export const ThemeContext = createContext<ThemeContextType | undefined>(
@@ -30,14 +30,14 @@ interface ThemeProviderProps {
 export const ThemeProvider: FC<ThemeProviderProps> = ({ children }) => {
   const systemTheme = useColorScheme() || "light";
   const [appTheme, setAppTheme] = useState<string>("auto");
-  const [useSystem, setUseSystem] = useState<boolean>(true);
+  // const [useSystem, setUseSystem] = useState<boolean>(true);
   useEffect(() => {
     const loadStoredTheme = async () => {
       try {
         const storedTheme = await AsyncStorage.getItem("storedTheme");
         if (storedTheme) {
           setAppTheme(storedTheme);
-          setUseSystem(storedTheme === "auto");
+          // setUseSystem(storedTheme === "auto");
         }
       } catch (error) {
         console.error("Error loading theme:", error);
@@ -64,12 +64,10 @@ export const ThemeProvider: FC<ThemeProviderProps> = ({ children }) => {
     return appTheme === "dark" ? darkT : lightT;
   };
 
-  const theme = getTheme(systemTheme, useSystem ? "auto" : appTheme);
+  const theme = getTheme(systemTheme, appTheme);
 
   return (
-    <ThemeContext.Provider
-      value={{ appTheme, setAppTheme, theme, useSystem, setUseSystem }}
-    >
+    <ThemeContext.Provider value={{ appTheme, setAppTheme, theme }}>
       {children}
     </ThemeContext.Provider>
   );

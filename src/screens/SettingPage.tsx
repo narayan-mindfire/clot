@@ -10,27 +10,27 @@ import { useNavigation, useTheme } from "@react-navigation/native";
 import AuthContext from "../context/AuthContext";
 import ThemeContext from "../context/ThemeContext";
 import darkT from "../Themes/dark";
+
 const SettingPage = () => {
   const navigation = useNavigation();
   const auth = useContext(AuthContext);
   const themeContext = useContext(ThemeContext);
-  const deviceTheme = useColorScheme();
   const { colors } = useTheme();
 
-  const handleSystemTheme = () => {
-    if (!themeContext?.useSystem) {
-      themeContext?.setUseSystem(true);
-    }
+  if (!themeContext) return null;
+
+  const toggleTheme = () => {
+    const newTheme = themeContext.appTheme === "dark" ? "light" : "dark";
+    themeContext.setAppTheme(newTheme);
   };
 
-  const toggleTheme = (mode: string) => {
-    if (themeContext?.useSystem) themeContext.setUseSystem(false);
-    themeContext?.setAppTheme(mode);
+  const setAuto = () => {
+    themeContext.setAppTheme("auto");
   };
 
   return (
     <View style={styles.container}>
-      <Text style={{ color: colors.text }}>SettingPage</Text>
+      <Text style={{ color: colors.text }}>Setting Page</Text>
 
       <TouchableOpacity
         style={styles.btn}
@@ -40,38 +40,21 @@ const SettingPage = () => {
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.btn} onPress={() => auth?.signOut()}>
-        <Text style={styles.btntxt}>Signout</Text>
+        <Text style={styles.btntxt}>Sign Out</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
         style={[styles.btn, { width: 300 }]}
-        onPress={() => {
-          if (
-            themeContext?.theme === darkT ||
-            (themeContext?.useSystem && deviceTheme === "dark")
-          ) {
-            toggleTheme("light");
-          } else {
-            toggleTheme("dark");
-          }
-        }}
+        onPress={toggleTheme}
       >
         <Text style={styles.btntxt}>
-          Change to:{" "}
-          {themeContext?.theme === darkT ||
-          (themeContext?.useSystem && deviceTheme === "dark")
-            ? " LIGHT MODE"
-            : " DARK MODE"}
+          Manually Change to{" "}
+          {themeContext.appTheme === "dark" ? "LIGHT" : "DARK"} MODE
         </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity
-        style={[styles.btn, { width: 300 }]}
-        onPress={handleSystemTheme}
-      >
-        <Text style={styles.btntxt}>
-          Use System Theme: {JSON.stringify(themeContext?.useSystem)}
-        </Text>
+      <TouchableOpacity style={[styles.btn, { width: 300 }]} onPress={setAuto}>
+        <Text style={styles.btntxt}>use System theme</Text>
       </TouchableOpacity>
     </View>
   );
