@@ -54,7 +54,10 @@ const SettingPage = () => {
       </TouchableOpacity>
 
       <TouchableOpacity style={[styles.btn, { width: 300 }]} onPress={setAuto}>
-        <Text style={styles.btntxt}>use System theme</Text>
+        <Text style={styles.btntxt}>
+          use System theme :{" "}
+          {themeContext.appTheme === "auto" ? "True" : "False"}
+        </Text>
       </TouchableOpacity>
     </View>
   );
