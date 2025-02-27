@@ -5,28 +5,21 @@ import {
   useColorScheme,
   View,
 } from "react-native";
-import React, { useContext } from "react";
+import React, { useEffect } from "react";
 import { useNavigation, useTheme } from "@react-navigation/native";
-import AuthContext from "../context/AuthContext";
-import ThemeContext from "../context/ThemeContext";
-import darkT from "../Themes/dark";
+import { useDispatch, useSelector } from "react-redux";
+import { changeTheme, setSystemTheme } from "../redux/slices/ThemeSlice";
+import { RootState, AppDispatch } from "../redux/store";
 
 const SettingPage = () => {
   const navigation = useNavigation();
-  const auth = useContext(AuthContext);
-  const themeContext = useContext(ThemeContext);
+  const systemTheme = useColorScheme();
   const { colors } = useTheme();
-
-  if (!themeContext) return null;
-
-  const toggleTheme = () => {
-    const newTheme = themeContext.appTheme === "dark" ? "light" : "dark";
-    themeContext.setAppTheme(newTheme);
-  };
-
-  const setAuto = () => {
-    themeContext.setAppTheme("auto");
-  };
+  const dispatch = useDispatch<AppDispatch>();
+  const themeState = useSelector((state: RootState) => state.themeHandler);
+  useEffect(() => {
+    if (systemTheme) dispatch(setSystemTheme(systemTheme));
+  }, [systemTheme, themeState.mode]);
 
   return (
     <View style={styles.container}>
@@ -39,32 +32,30 @@ const SettingPage = () => {
         <Text style={styles.btntxt}>Visit Profile</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.btn} onPress={() => auth?.signOut()}>
-        <Text style={styles.btntxt}>Sign Out</Text>
-      </TouchableOpacity>
-
       <TouchableOpacity
-        style={[styles.btn, { width: 300 }]}
-        onPress={toggleTheme}
+        style={styles.btn}
+        onPress={() => dispatch(changeTheme("dark"))}
       >
         <Text style={styles.btntxt}>
-          use Light mode :{" "}
-          {themeContext.appTheme === "light" ? "True" : "False"}
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[styles.btn, { width: 300 }]}
-        onPress={toggleTheme}
-      >
-        <Text style={styles.btntxt}>
-          use Dark mode : {themeContext.appTheme === "dark" ? "True" : "False"}
+          Dark Mode : {themeState.mode === "dark" ? "true" : "false"}
         </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={[styles.btn, { width: 300 }]} onPress={setAuto}>
+      <TouchableOpacity
+        style={styles.btn}
+        onPress={() => dispatch(changeTheme("light"))}
+      >
         <Text style={styles.btntxt}>
-          use System theme :{" "}
-          {themeContext.appTheme === "auto" ? "True" : "False"}
+          Light Mode: {themeState.mode === "light" ? "true" : "false"}
+        </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.btn}
+        onPress={() => dispatch(changeTheme("auto"))}
+      >
+        <Text style={styles.btntxt}>
+          Auto Mode: {themeState.mode === "auto" ? "true" : "false"}
         </Text>
       </TouchableOpacity>
     </View>
@@ -81,7 +72,7 @@ const styles = StyleSheet.create({
   },
   btn: {
     height: 40,
-    width: 100,
+    width: 150,
     borderRadius: 20,
     backgroundColor: "#8E6CEF",
     justifyContent: "center",

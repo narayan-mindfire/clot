@@ -7,11 +7,11 @@ import {
   incrementByAmount,
   decrementByValue,
 } from "../redux/slices/counterSlice";
-import { RootState } from "../redux/store";
+import { AppDispatch, RootState } from "../redux/store";
 
 export default function Demo() {
   const count = useSelector((state: RootState) => state.counter.value);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   return (
     <View style={styles.container}>

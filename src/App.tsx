@@ -1,6 +1,6 @@
 import React from "react";
 import RootStack from "./navigation/RootStack";
-import { ThemeProvider } from "./context/ThemeContext";
+// import { ThemeProvider } from "./context/ThemeContext";
 import { AuthProvider } from "./context/AuthContext";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
@@ -9,10 +9,10 @@ export const App = () => {
   return (
     <Provider store={store}>
       <AuthProvider>
-        <ThemeProvider>
-          <RootStack />
-          {/* <Demo /> */}
-        </ThemeProvider>
+        {/* <ThemeProvider> */}
+        <RootStack />
+        {/* <Demo /> */}
+        {/* </ThemeProvider> */}
       </AuthProvider>
     </Provider>
   );

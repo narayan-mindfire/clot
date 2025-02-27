@@ -5,18 +5,18 @@ import Welcome from "../screens/Welcome";
 import Explore from "../screens/Explore";
 import { RootStackParamList } from "../TypesDefined/NavTypes";
 import Signin from "../screens/AuthScreens/Signin";
-import ThemeContext from "../context/ThemeContext";
 import AuthContext from "../context/AuthContext";
 import DrawNav from "./Drawer";
 import Profile from "../screens/userScreens/Profile";
-
+import { RootState, AppDispatch } from "../redux/store";
+import { useSelector } from "react-redux";
 const RootNav = createNativeStackNavigator<RootStackParamList>();
 
 const RootStack: FC = () => {
-  const themeContext = useContext(ThemeContext);
+  const theme = useSelector((state: RootState) => state.themeHandler.theme);
   const auth = useContext(AuthContext);
   return (
-    <NavigationContainer theme={themeContext?.theme}>
+    <NavigationContainer theme={theme}>
       <RootNav.Navigator screenOptions={{ headerShown: false }}>
         {!auth?.token ? (
           <>
