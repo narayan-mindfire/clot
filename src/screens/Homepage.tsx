@@ -1,72 +1,39 @@
+import React, { useEffect } from "react";
 import {
-  Alert,
-  BackHandler,
-  FlatList,
-  Image,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
   View,
+  Text,
+  FlatList,
+  SafeAreaView,
+  StatusBar,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
 } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../redux/store";
+import { fetchProducts } from "../redux/slices/ProductSlice";
 import ProductCard from "../components/ProductCard";
-import { useFocusEffect, useTheme } from "@react-navigation/native";
-import { useCallback, useEffect, useState } from "react";
+import dark from "../Themes/dark";
+import { useTheme } from "@react-navigation/native";
 import SearchBar from "../components/SearchBar";
-import { fetchProducts } from "../services/GetProducts";
-
 export default function Home() {
-  type Product = {
-    id: number;
-    title: string;
-    price: number;
-    images: string[];
-  };
-
-  const [products, setProducts] = useState<Product[]>([]);
-
-  useEffect(() => {
-    let isMounted = true;
-    const getProducts = async () => {
-      try {
-        const prod = await fetchProducts();
-        if (isMounted) setProducts(prod);
-      } catch (error) {
-        console.error("Error fetching products", error);
-      }
-    };
-    getProducts();
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  useFocusEffect(
-    useCallback(() => {
-      const onBackPress = () => {
-        Alert.alert("Exit App", "Are you sure you want to exit the app?", [
-          {
-            text: "Cancle",
-            onPress: () => null,
-          },
-          {
-            text: "Yes",
-            onPress: () => BackHandler.exitApp(),
-          },
-        ]);
-        return true;
-      };
-      const backHandler = BackHandler.addEventListener(
-        "hardwareBackPress",
-        onBackPress
-      );
-      return () => backHandler.remove();
-    }, [])
+  const dispatch = useDispatch<AppDispatch>();
+  const { products, loading } = useSelector(
+    (state: RootState) => state.products
   );
-  const { dark, colors } = useTheme();
-  return (
+  const { colors } = useTheme();
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, [dispatch]);
+
+  return loading ? (
+    <SafeAreaView>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text style={{ color: "#fff" }}>loading page</Text>
+      </View>
+    </SafeAreaView>
+  ) : (
     <SafeAreaView>
       <StatusBar
         backgroundColor={colors.background}

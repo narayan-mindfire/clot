@@ -8,19 +8,14 @@ import {
 import React, { useEffect } from "react";
 import { useNavigation, useTheme } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
-import { changeTheme, setSystemTheme } from "../redux/slices/ThemeSlice";
+import { changeTheme } from "../redux/slices/ThemeSlice";
 import { RootState, AppDispatch } from "../redux/store";
 
 const SettingPage = () => {
   const navigation = useNavigation();
-  const systemTheme = useColorScheme();
   const { colors } = useTheme();
   const dispatch = useDispatch<AppDispatch>();
   const themeState = useSelector((state: RootState) => state.themeHandler);
-  useEffect(() => {
-    if (systemTheme) dispatch(setSystemTheme(systemTheme));
-  }, [systemTheme, themeState.mode]);
-
   return (
     <View style={styles.container}>
       <Text style={{ color: colors.text }}>Setting Page</Text>
