@@ -1,4 +1,3 @@
-import { Theme } from "@react-navigation/native";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 interface ThemeState {
   mode: "light" | "dark" | "auto"; 

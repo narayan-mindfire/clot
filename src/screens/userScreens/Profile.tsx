@@ -1,52 +1,30 @@
 import { Image, StyleSheet, Text, View } from "react-native";
-import React, { FC, useContext, useEffect, useState } from "react";
+import React, { FC } from "react";
 import { useTheme } from "@react-navigation/native";
 import { ProfileParams } from "../../TypesDefined/NavTypes";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import AuthContext from "../../context/AuthContext";
-
+import { RootState, useAppSelector } from "../../redux/store";
 const Profile: FC<ProfileParams> = () => {
   const { colors } = useTheme();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [image, setImage] = useState("");
-  const [firstname, setFirstname] = useState("not found");
-  const [lastname, setLastname] = useState("not found");
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const unuserData = await AsyncStorage.getItem("userData");
-        if (unuserData) {
-          const userData = JSON.parse(unuserData);
-          if (userData) {
-            if (userData.username) setName(userData.username);
-            if (userData.email) setEmail(userData.email);
-            if (userData.image) setImage(userData.image);
-            if (userData.firstName) setFirstname(userData.firstName);
-            if (userData.lastName) setLastname(userData.lastName);
-          }
-        }
-      } catch (error) {
-        console.log("Error fetching user data:", error);
-      }
-    };
-    getData();
-  }, []);
+  const userData = useAppSelector((state: RootState) => state.auth.user);
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Image
         source={
-          image
-            ? { uri: image }
+          userData
+            ? { uri: userData?.image }
             : require("../../assets/images/defaultprofile.png")
         }
         style={styles.profileImage}
       />
-      <Text style={[styles.name, { color: colors.text }]}>{name}</Text>
       <Text style={[styles.name, { color: colors.text }]}>
-        {firstname} {lastname}
+        {userData?.username}
       </Text>
-      <Text style={[styles.email, { color: colors.text }]}>{email}</Text>
+      <Text style={[styles.name, { color: colors.text }]}>
+        {userData?.firstName} {userData?.lastName}
+      </Text>
+      <Text style={[styles.email, { color: colors.text }]}>
+        {userData?.email}
+      </Text>
     </View>
   );
 };

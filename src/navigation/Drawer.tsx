@@ -7,25 +7,20 @@ import {
 } from "@react-navigation/drawer";
 import { StyleSheet, View } from "react-native";
 import { Linking } from "react-native";
-import { useContext } from "react";
-import AuthContext from "../context/AuthContext";
 import { useNavigation, useTheme } from "@react-navigation/native";
 import SettingPage from "../screens/SettingPage";
 import Homepage from "../screens/Homepage";
-import getCurUser from "../services/GetUser";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useAppDispatch } from "../redux/store";
+import { logout } from "../redux/slices/authSlice";
 const Drawer = createDrawerNavigator();
 
 function CustomDrawerContent(props: DrawerContentComponentProps) {
-  const auth = useContext(AuthContext);
   const { colors } = useTheme();
-  const user = useContext(AuthContext);
   const navigation = useNavigation();
-  const visitProfile = async (token: string | null | undefined) => {
-    if (!(await AsyncStorage.getItem("userData"))) await getCurUser();
+  const visitProfile = () => {
     navigation.navigate("Profile");
   };
-
+  const dispatch = useAppDispatch();
   return (
     <View style={styles.container}>
       <DrawerContentScrollView
@@ -40,13 +35,15 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
             style={{ backgroundColor: colors.card, borderRadius: 20 }}
             label="Profile"
             labelStyle={{ color: colors.text, fontWeight: "bold" }}
-            onPress={() => visitProfile(user?.token)}
+            onPress={() => visitProfile()}
           />
           <DrawerItem
             style={{ backgroundColor: colors.card, borderRadius: 20 }}
             label="LogOut"
             labelStyle={{ color: "red", fontWeight: "bold" }}
-            onPress={() => auth?.signOut()}
+            onPress={() => {
+              dispatch(logout());
+            }}
           />
           <DrawerItem
             label="Help"

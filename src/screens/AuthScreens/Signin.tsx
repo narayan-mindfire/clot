@@ -8,26 +8,25 @@ import {
   StatusBar,
 } from "react-native";
 import React, { useContext, useState } from "react";
-import { authFunction } from "../../services/Authenticate";
 import { useTheme } from "@react-navigation/native";
 import { SigninParams } from "../../TypesDefined/NavTypes";
-import AuthContext from "../../context/AuthContext";
+import { useSelector } from "react-redux";
+import { RootState, useAppDispatch } from "../../redux/store";
+import { authenticateUser } from "../../redux/slices/authSlice";
 const Welcome: React.FC<SigninParams> = ({ navigation }) => {
+  const dispatch = useAppDispatch();
+  const authState = useSelector((state: RootState) => state.auth);
   const { dark, colors } = useTheme();
-  const auth = useContext(AuthContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const signInHelpr = async () => {
-    const userData = await authFunction({
-      username: username,
-      password: password,
-    });
+    console.log("setting things in diapatch - signing");
     try {
-      console.log("calling signin function");
-      auth?.signIn(userData);
+      await dispatch(authenticateUser({ username, password }));
     } catch (error) {
-      console.log("sign in function is not working");
+      console.log(`couldn't sign the user in: ${error}`);
     }
+    console.log(`user ${authState.user?.firstName} is stored in redux`);
   };
   return (
     <View style={styles.container}>
@@ -131,7 +130,6 @@ export default Welcome;
 
 const styles = StyleSheet.create({
   container: {
-    // backgroundColor: "#FFFFFF",
     display: "flex",
     width: "100%",
     padding: 20,

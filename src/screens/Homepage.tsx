@@ -20,7 +20,7 @@ import SearchBar from "../components/SearchBar";
 export default function Home() {
   const dispatch = useDispatch<AppDispatch>();
   const { products, loading } = useSelector(
-    (state: RootState) => state.products
+    (state: RootState) => state.productHandler
   );
   const { colors } = useTheme();
   useEffect(() => {
