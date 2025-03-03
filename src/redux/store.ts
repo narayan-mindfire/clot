@@ -5,14 +5,22 @@ import {persistStore, persistReducer} from "redux-persist"
 import themeReducer from "./slices/ThemeSlice"
 import productReducer from "./slices/ProductSlice"
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import createSecureStore from "redux-persist-expo-securestore"
+
 
 const themePersistConfig = {
   storage: AsyncStorage,
   key: "theme"
 }
 
+const secureStorage = createSecureStore()
+const userPersistConfig = {
+  storage: secureStorage,
+  key: "user"
+}
+
 const rootReducer = combineReducers({
-  auth: authReducer,
+  auth: persistReducer(userPersistConfig, authReducer),
   themeHandler: persistReducer(themePersistConfig, themeReducer),
   productHandler: productReducer
 })
