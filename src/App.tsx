@@ -2,13 +2,17 @@ import React from "react";
 import RootStack from "./navigation/RootStack";
 // import { ThemeProvider } from "./context/ThemeContext";
 import { Provider } from "react-redux";
-import { store } from "./redux/store";
+import { persistor, store } from "./redux/store";
+import { PersistGate } from "redux-persist/integration/react";
+import SplashScreen from "./screens/SplashScreen";
 export const App = () => {
   return (
     <Provider store={store}>
       {/* <AuthProvider> */}
       {/* <ThemeProvider> */}
-      <RootStack />
+      <PersistGate loading={<SplashScreen />} persistor={persistor}>
+        <RootStack />
+      </PersistGate>
       {/* <Demo /> */}
       {/* </ThemeProvider> */}
       {/* </AuthProvider> */}
