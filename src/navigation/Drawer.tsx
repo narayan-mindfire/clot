@@ -10,7 +10,7 @@ import { Linking } from "react-native";
 import { useNavigation, useTheme } from "@react-navigation/native";
 import SettingPage from "../screens/SettingPage";
 import Homepage from "../screens/Homepage";
-import { useAppDispatch } from "../redux/store";
+import { persistor, useAppDispatch } from "../redux/store";
 import { logout } from "../redux/slices/authSlice";
 const Drawer = createDrawerNavigator();
 
@@ -43,6 +43,7 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
             labelStyle={{ color: "red", fontWeight: "bold" }}
             onPress={() => {
               dispatch(logout());
+              persistor.purge();
             }}
           />
           <DrawerItem

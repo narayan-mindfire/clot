@@ -15,7 +15,7 @@ const SettingPage = () => {
   const navigation = useNavigation();
   const { colors } = useTheme();
   const dispatch = useDispatch<AppDispatch>();
-  const themeState = useSelector((state: RootState) => state.themeHandler);
+  const themeState = useSelector((state: RootState) => state.theme);
   return (
     <View style={styles.container}>
       <Text style={{ color: colors.text }}>Setting Page</Text>

@@ -8,14 +8,9 @@ import SplashScreen from "./screens/SplashScreen";
 export const App = () => {
   return (
     <Provider store={store}>
-      {/* <AuthProvider> */}
-      {/* <ThemeProvider> */}
       <PersistGate loading={<SplashScreen />} persistor={persistor}>
         <RootStack />
       </PersistGate>
-      {/* <Demo /> */}
-      {/* </ThemeProvider> */}
-      {/* </AuthProvider> */}
     </Provider>
   );
 };
