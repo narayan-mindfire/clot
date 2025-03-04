@@ -43,7 +43,6 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
             labelStyle={{ color: "red", fontWeight: "bold" }}
             onPress={() => {
               dispatch(logout());
-              persistor.purge();
             }}
           />
           <DrawerItem
