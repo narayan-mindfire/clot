@@ -136,6 +136,7 @@ export default function Home() {
                       ? item.images[0]
                       : "https://assets.dummyjson.com/public/qr-code.png"
                   }
+                  id={item.id}
                 />
               )}
               ItemSeparatorComponent={() => {
@@ -182,6 +183,7 @@ export default function Home() {
                       ? item.images[0]
                       : "https://assets.dummyjson.com/public/qr-code.png"
                   }
+                  id={item.id}
                 />
               )}
               ItemSeparatorComponent={() => {

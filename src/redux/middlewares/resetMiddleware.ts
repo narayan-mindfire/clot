@@ -1,10 +1,22 @@
+import { Middleware } from "@reduxjs/toolkit";
 import { logout } from "../slices/authSlice";
+import { persistor, RootState } from "../store";
+
+import purgeStoredState from "redux-persist/es/purgeStoredState";
+import { productPersistConfig } from "../reducer";
+
 export const RESET_STATE = "RESET_STATE";
-import { persistor } from "../store";
-export const resetMiddleware = ({dispatch}) => (next : any) => async (action: { type: string; }) => {
+
+export const resetMiddleware: Middleware<
+{},
+RootState
+> = ({dispatch}) => (next) => async (action : any) => {
     if (action.type === RESET_STATE) {
         dispatch(logout());
         await persistor.purge();
+        purgeStoredState(productPersistConfig).then(() => {
+            console.log('Purge completed');
+          });   
     }
     return next(action);
 };

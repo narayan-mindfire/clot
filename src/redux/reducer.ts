@@ -5,12 +5,24 @@ import createSecureStore from "redux-persist-expo-securestore"
 import themeReducer from "./slices/ThemeSlice"
 import productReducer from "./slices/ProductSlice"
 import authReducer from "./slices/authSlice";
+import wishlistReducer from "./slices/wishList"
 
 const themePersistConfig = {
     storage: AsyncStorage,
     key: "theme",
     whiteList: ["mode"]
   }
+  
+export const productPersistConfig = {
+    storage: AsyncStorage,
+    key: "products",
+    // whiteList: ["mode"]
+  }
+
+const wishlistPersistConfig = {
+  storage: AsyncStorage,
+  key: "wishlist",
+}
   
   const secureStorage = createSecureStore()
   
@@ -19,13 +31,13 @@ const themePersistConfig = {
     key: "auth",
     whiteList: ["user", "token"]
   }
-  
-  
+
   
   const rootReducer = combineReducers({
     auth: persistReducer(userPersistConfig, authReducer),
     theme: persistReducer(themePersistConfig, themeReducer),
-    product: productReducer
+    product: persistReducer(productPersistConfig,productReducer),
+    wishlist: persistReducer(wishlistPersistConfig, wishlistReducer)
   })
   
 export default rootReducer

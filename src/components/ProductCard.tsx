@@ -1,19 +1,43 @@
 import { useTheme } from "@react-navigation/native";
 import { StyleSheet, View, Image, Text, TouchableOpacity } from "react-native";
+import { RootState, useAppDispatch, useAppSelector } from "../redux/store";
+import { addToWishlist, removeFromWishlist } from "../redux/slices/wishList";
 
 interface ProductCardProps {
   name: string;
   price: number;
   image: string;
+  id: number;
 }
 
-export default function ProductCard({ name, price, image }: ProductCardProps) {
+export default function ProductCard({
+  id,
+  name,
+  price,
+  image,
+}: ProductCardProps) {
   const { colors } = useTheme();
+
+  const dispatch = useAppDispatch();
+  const wishlistItems = useAppSelector(
+    (state: RootState) => state.wishlist.entities
+  );
+
+  const isWishlisted = !!wishlistItems[id];
+
+  const handleWishlistToggle = () => {
+    if (isWishlisted) {
+      dispatch(removeFromWishlist(id));
+    } else {
+      dispatch(addToWishlist({ id, name, price, image }));
+    }
+  };
+
   return (
     <View style={[styles.wrapper, { backgroundColor: colors.card }]}>
-      <TouchableOpacity style={styles.fav}>
+      <TouchableOpacity style={styles.fav} onPress={handleWishlistToggle}>
         <Image
-          tintColor={colors.text}
+          tintColor={isWishlisted ? "red" : colors.text}
           source={require("../assets/icons/fav-icon.png")}
         />
       </TouchableOpacity>

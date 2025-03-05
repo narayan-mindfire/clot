@@ -7,18 +7,19 @@ import {
 } from "@react-navigation/drawer";
 import { StyleSheet, View } from "react-native";
 import { Linking } from "react-native";
-import { useNavigation, useTheme } from "@react-navigation/native";
+import { useTheme } from "@react-navigation/native";
 import SettingPage from "../screens/SettingPage";
 import Homepage from "../screens/Homepage";
-import { persistor, useAppDispatch } from "../redux/store";
-import { logout } from "../redux/slices/authSlice";
+import { useAppDispatch } from "../redux/store";
+import { resetState } from "../redux/middlewares/resetMiddleware";
+import Wishlist from "../screens/Wishlist";
+
 const Drawer = createDrawerNavigator();
 
 function CustomDrawerContent(props: DrawerContentComponentProps) {
   const { colors } = useTheme();
-  const navigation = useNavigation();
   const visitProfile = () => {
-    navigation.navigate("Profile");
+    props.navigation.navigate("Profile");
   };
   const dispatch = useAppDispatch();
   return (
@@ -42,7 +43,7 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
             label="LogOut"
             labelStyle={{ color: "red", fontWeight: "bold" }}
             onPress={() => {
-              dispatch(logout());
+              dispatch(resetState());
             }}
           />
           <DrawerItem
@@ -83,6 +84,11 @@ const MyDrawer = () => {
         name="Settings"
         options={{ title: "Settings" }}
         component={SettingPage}
+      />
+      <Drawer.Screen
+        name="Wishlist"
+        options={{ title: "Wishlist" }}
+        component={Wishlist}
       />
     </Drawer.Navigator>
   );
