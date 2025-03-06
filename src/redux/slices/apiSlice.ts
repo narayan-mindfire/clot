@@ -7,17 +7,16 @@ interface Product {
     images: string[];
   }
 
-  export const apiSlice = createApi({
+export const apiSlice = createApi({
     reducerPath: "api",
-    baseQuery: fetchBaseQuery({ baseUrl: "https://dummyjson.com" }),
+    baseQuery: fetchBaseQuery({baseUrl: "https://dummyjson.com"}),
     endpoints: (builder) => ({
-        getProducts: builder.query<Product[], void>({
+        getProducts: builder.query({
             query: () => "/products",
-            transformResponse: (response: { products: Product[] }) => response.products,
-        }),
-    }),
-});
-
+            transformResponse: (response: {products : Product[]}) => response.products
+        })
+    })
+})
 
 export const {useGetProductsQuery} = apiSlice;
 export default apiSlice
