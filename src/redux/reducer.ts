@@ -6,6 +6,7 @@ import themeReducer from "./slices/ThemeSlice"
 import productReducer from "./slices/ProductSlice"
 import authReducer from "./slices/authSlice";
 import wishlistReducer from "./slices/wishList"
+import apiSlice from "./slices/apiSlice"
 
 const themePersistConfig = {
     storage: AsyncStorage,
@@ -17,7 +18,7 @@ export const productPersistConfig = {
     storage: AsyncStorage,
     key: "products",
     // whiteList: ["mode"]
-  }
+  } 
 
 const wishlistPersistConfig = {
   storage: AsyncStorage,
@@ -37,6 +38,7 @@ const wishlistPersistConfig = {
     auth: persistReducer(userPersistConfig, authReducer),
     theme: persistReducer(themePersistConfig, themeReducer),
     product: persistReducer(productPersistConfig,productReducer),
+    [apiSlice.reducerPath] : apiSlice.reducer,
     wishlist: persistReducer(wishlistPersistConfig, wishlistReducer)
   })
   
